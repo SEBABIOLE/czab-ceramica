@@ -573,8 +573,8 @@
     </div>
 
     <script>
-        // Configuration
-        const SHEETS_API_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL'; // Reemplazar con tu URL de Apps Script
+        // Configuration - URL YA CONFIGURADA!
+        const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwrluBPOLKemaGKUVRicu7qsd8LwtTufh-cl9zsse2aZoX6Lyr2q-TLZMWc_kP5HpiT/exec';
         
         // Turnos configuration
         const TURNOS_CONFIG = {
@@ -996,6 +996,7 @@
             // Disable button
             const btn = document.getElementById('confirmarInscripcionBtn');
             btn.disabled = true;
+            btn.textContent = 'Enviando...';
 
             try {
                 await sendToSheets('inscripcion', {
@@ -1024,6 +1025,7 @@
                 showModal('Error', 'Hubo un problema al procesar tu inscripción. Intentá de nuevo.');
             } finally {
                 btn.disabled = false;
+                btn.textContent = 'Confirmar Inscripción';
             }
         }
 
@@ -1052,6 +1054,7 @@
 
             const btn = document.getElementById('confirmarCambioBtn');
             btn.disabled = true;
+            btn.textContent = 'Procesando...';
 
             try {
                 await sendToSheets('cambio_turno', {
@@ -1076,6 +1079,7 @@
                 showModal('Error', 'No pudimos procesar el cambio. Intentá de nuevo.');
             } finally {
                 btn.disabled = false;
+                btn.textContent = 'Confirmar Cambio';
             }
         }
 
@@ -1089,6 +1093,7 @@
 
             const btn = document.getElementById('confirmarRecuperacionBtn');
             btn.disabled = true;
+            btn.textContent = 'Registrando...';
 
             try {
                 await sendToSheets('recuperacion', {
@@ -1103,6 +1108,7 @@
                 showModal('Error', 'No pudimos registrar la recuperación. Intentá de nuevo.');
             } finally {
                 btn.disabled = false;
+                btn.textContent = 'Confirmar Recuperación';
             }
         }
 
@@ -1118,6 +1124,7 @@
 
             const btn = document.getElementById('confirmarPagoBtn');
             btn.disabled = true;
+            btn.textContent = 'Registrando pago...';
 
             try {
                 const fileInput = document.getElementById('comprobante');
@@ -1132,7 +1139,7 @@
                     monto: monto,
                     metodo: metodo,
                     mes_pagado: mes,
-                    comprobante: comprobanteData
+                    comprobante: comprobanteData ? 'Sí' : 'No'
                 });
 
                 showModal('Pago registrado', `Registramos tu pago de ${monto} por ${metodo}`);
@@ -1149,10 +1156,11 @@
                 showModal('Error', 'No pudimos registrar el pago. Intentá de nuevo.');
             } finally {
                 btn.disabled = false;
+                btn.textContent = 'Registrar Pago';
             }
         }
 
-        // API Communication
+        // API Communication - AHORA CON LA URL REAL!
         async function sendToSheets(action, data) {
             const payload = {
                 action: action,
@@ -1162,27 +1170,24 @@
 
             console.log('Sending to sheets:', payload);
             
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Uncomment when you have the Apps Script URL
-            /*
             try {
                 const response = await fetch(SHEETS_API_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
+                    mode: 'no-cors', // Importante para Google Apps Script
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(payload)
                 });
                 
+                // Con no-cors no podemos leer la respuesta, pero el request se envía
                 console.log('Request sent successfully');
+                return { success: true };
+                
             } catch (error) {
                 console.error('Error:', error);
                 throw error;
             }
-            */
         }
 
         // Helper Functions
@@ -1266,133 +1271,5 @@
             document.getElementById('modal').style.display = 'none';
         }
     </script>
-
-    <!-- Google Apps Script Code (para pegar en tu proyecto de Apps Script) -->
-    <!-- 
-    function doPost(e) {
-        try {
-            const sheet = SpreadsheetApp.getActiveSpreadsheet();
-            const data = JSON.parse(e.postData.contents);
-            
-            switch(data.action) {
-                case 'inscripcion':
-                    handleInscripcion(sheet, data);
-                    break;
-                case 'asistencia':
-                    handleAsistencia(sheet, data);
-                    break;
-                case 'cambio_turno':
-                    handleCambioTurno(sheet, data);
-                    break;
-                case 'recuperacion':
-                    handleRecuperacion(sheet, data);
-                    break;
-                case 'pago':
-                    handlePago(sheet, data);
-                    break;
-            }
-            
-            return ContentService
-                .createTextOutput(JSON.stringify({success: true, message: 'Datos guardados correctamente'}))
-                .setMimeType(ContentService.MimeType.JSON);
-                
-        } catch(error) {
-            return ContentService
-                .createTextOutput(JSON.stringify({success: false, error: error.toString()}))
-                .setMimeType(ContentService.MimeType.JSON);
-        }
-    }
-    
-    function handleInscripcion(sheet, data) {
-        const inscripcionesSheet = sheet.getSheetByName('Inscripciones') || sheet.insertSheet('Inscripciones');
-        
-        // Add headers if first row
-        if (inscripcionesSheet.getLastRow() === 0) {
-            inscripcionesSheet.appendRow(['Fecha', 'Nombre', 'Teléfono', 'Turnos', 'Estado']);
-        }
-        
-        inscripcionesSheet.appendRow([
-            new Date(),
-            data.nombre,
-            data.telefono,
-            data.turnos.join(', '),
-            'Activo'
-        ]);
-    }
-    
-    function handleAsistencia(sheet, data) {
-        const asistenciaSheet = sheet.getSheetByName('Asistencia') || sheet.insertSheet('Asistencia');
-        
-        if (asistenciaSheet.getLastRow() === 0) {
-            asistenciaSheet.appendRow(['Fecha', 'Teléfono', 'Turno', 'Asistencia', 'Fecha Clase']);
-        }
-        
-        asistenciaSheet.appendRow([
-            new Date(),
-            data.telefono,
-            data.turno,
-            data.asiste ? 'Presente' : 'Ausente',
-            data.fecha
-        ]);
-    }
-    
-    function handleCambioTurno(sheet, data) {
-        const cambiosSheet = sheet.getSheetByName('Cambios') || sheet.insertSheet('Cambios');
-        
-        if (cambiosSheet.getLastRow() === 0) {
-            cambiosSheet.appendRow(['Fecha', 'Teléfono', 'Turno Anterior', 'Turno Nuevo', 'Estado']);
-        }
-        
-        cambiosSheet.appendRow([
-            new Date(),
-            data.telefono,
-            data.turno_actual,
-            data.turno_nuevo,
-            'Procesado'
-        ]);
-    }
-    
-    function handleRecuperacion(sheet, data) {
-        const recuperacionesSheet = sheet.getSheetByName('Recuperaciones') || sheet.insertSheet('Recuperaciones');
-        
-        if (recuperacionesSheet.getLastRow() === 0) {
-            recuperacionesSheet.appendRow(['Fecha', 'Teléfono', 'Clase Perdida', 'Slot Recuperación', 'Estado']);
-        }
-        
-        recuperacionesSheet.appendRow([
-            new Date(),
-            data.telefono,
-            data.fecha_clase_perdida,
-            data.slot_recuperacion,
-            'Pendiente'
-        ]);
-    }
-    
-    function handlePago(sheet, data) {
-        const pagosSheet = sheet.getSheetByName('Pagos') || sheet.insertSheet('Pagos');
-        
-        if (pagosSheet.getLastRow() === 0) {
-            pagosSheet.appendRow(['Fecha', 'Teléfono', 'Monto', 'Método', 'Mes Pagado', 'Comprobante', 'Estado']);
-        }
-        
-        pagosSheet.appendRow([
-            new Date(),
-            data.telefono,
-            data.monto,
-            data.metodo,
-            data.mes_pagado,
-            data.comprobante ? 'Sí' : 'No',
-            'Confirmado'
-        ]);
-    }
-    
-    // Para deploy:
-    // 1. Guardá este código en script.google.com
-    // 2. Click en "Implementar" > "Nueva implementación"
-    // 3. Tipo: "Aplicación web"
-    // 4. Ejecutar como: "Yo"
-    // 5. Quién tiene acceso: "Cualquiera"
-    // 6. Copiá la URL y pegala en SHEETS_API_URL
-    -->
 </body>
 </html>
