@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller de Cerámica - MiTempo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #D2691E;
+            --secondary: #CD853F;
+            --accent: #DEB887;
+            --bg-light: #FFF8DC;
+            --bg-cream: #FAEBD7;
+            --text-dark: #5C4033;
+            --text-light: #8B7355;
+            --success: #8FBC8F;
+            --error: #CD5C5C;
+            --shadow: rgba(139, 69, 19, 0.1);
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-cream) 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        /* Login Section */
+        .login-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 15px var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: var(--bg-light);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        .btn:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+            color: var(--text-dark);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* Main Menu */
+        .main-menu {
+            display: none;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px var(--shadow);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px var(--shadow);
+        }
+
+        .menu-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .menu-title {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: bold;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 15px var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--bg-cream);
+        }
+
+        .back-btn {
+            background: var(--accent);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .section-title {
+            flex: 1;
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        /* Turnos Display */
+        .turno-card {
+            background: var(--bg-cream);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .turno-header {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .turno-details {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        /* Availability Grid */
+        .availability-grid {
+            display: grid;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .slot-item {
+            background: var(--bg-light);
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slot-item:hover {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .slot-item.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .slot-time {
+            font-weight: bold;
+        }
+
+        .slot-availability {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .status-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-error {
+            background: var(--error);
+            color: white;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid var(--bg-cream);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+        /* File Upload */
+        .file-upload {
+            border: 2px dashed var(--accent);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg-light);
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .file-upload input[type="file"] {
+            display: none;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            margin: 20px;
+        }
+
+        .modal-title {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-asistencia-si, .btn-asistencia-no {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">🏺</div>
+            <h1>Taller de Cerámica</h1>
+            <p class="subtitle">Bienvenida a tu espacio creativo</p>
+        </header>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="login-section">
+            <div class="form-group">
+                <label for="phoneInput">Tu número de WhatsApp</label>
+                <input type="tel" id="phoneInput" placeholder="Ej: 3382416087" maxlength="14">
+            </div>
+            <button class="btn" id="loginBtn">Ingresar</button>
+        </div>
+
+        <!-- Main Menu -->
+        <div id="mainMenu" class="main-menu">
+            <div class="menu-grid">
+                <div class="menu-item" data-section="misTurnos">
+                    <div class="menu-icon">📅</div>
+                    <div class="menu-title">Mis Turnos</div>
+                </div>
+                <div class="menu-item" data-section="inscripcion">
+                    <div class="menu-icon">✨</div>
+                    <div class="menu-title">Inscripción</div>
+                </div>
+                <div class="menu-item" data-section="asistencia">
+                    <div class="menu-icon">✋</div>
+                    <div class="menu-title">Confirmar Asistencia</div>
+                </div>
+                <div class="menu-item" data-section="cambiarTurno">
+                    <div class="menu-icon">🔄</div>
+                    <div class="menu-title">Cambiar Turno</div>
+                </div>
+                <div class="menu-item" data-section="recuperacion">
+                    <div class="menu-icon">🔁</div>
+                    <div class="menu-title">Recuperar Clase</div>
+                </div>
+                <div class="menu-item" data-section="pagos">
+                    <div class="menu-icon">💳</div>
+                    <div class="menu-title">Registrar Pago</div>
+                </div>
+            </div>
+            <button class="btn btn-secondary" id="logoutBtn">Salir</button>
+        </div>
+
+        <!-- Mis Turnos Section -->
+        <div id="misTurnos" class="section">
+            <div class="section-header">
+                <button class="back-btn">←</button>
+                <h2 class="section-title">Mis Turnos</h2>
+            </div>
+            <div id="turnosList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando tus turnos...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inscripción Section -->
+        <div id="inscripcion" class="section">
+            <div class="section-header">
+                <button class="back-btn">←</button>
+                <h2 class="section-title">Nueva Inscripción</h2>
+            </div>
+            <div class="form-group">
+                <label for="nombreInscripcion">Tu nombre completo</label>
+                <input type="text" id="nombreInscripcion" placeholder="Ingresá tu nombre">
+            </div>
+            <div class="form-group">
+                <label>Turnos disponibles (podés elegir hasta 3)</label>
+                <div id="turnosDisponibles" class="availability-grid">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" id="confirmarInscripcionBtn">Confirmar Inscripción</button>
+        </div>
+
+        <!-- Asistencia Section -->
+        <div id="asistencia" class="section">
+            <div class="section-header">
+                <button class="back-btn">←</button>
+                <h2 class="section-title">Confirmar Asistencia</h2>
+            </div>
+            <div id="proximasClases">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Buscando próximas clases...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cambiar Turno Section -->
+        <div id="cambiarTurno" class="section">
+            <div class="section-header">
+                <button class="back-btn">←</button>
+                <h2 class="section-title">Cambiar Turno</h2>
+            </div>
+            <div class="form-group">
+                <label>Seleccioná el turno que querés cambiar</label>
+                <select id="turnoActual">
+                    <option value="">Cargando...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Elegí el nuevo turno</label>
+                <div id="nuevosTurnos" class="availability-grid">
+                    <!-- Se carga dinámicamente -->
+                </div>
+            </div>
+            <button class="btn" id="confirmarCambioBtn">Confirmar Cambio</button>
+        </div>
+
+        <!-- Recuperación Section -->
+        <div id="recuperacion" class="section">
+            <div class="section-header">
+                <button class="back-btn">←</button>
+                <h2 class="section-title">Recuperar Clase</h2>
+            </div>
+            <div class="form-group">
+                <label>¿Qué clase necesitás recuperar?</label>
+                <input type="date" id="fechaRecuperacion">
+            </div>
+            <div class="form-group">
+                <label>Slots disponibles para recuperación</label>
+                <div id="slotsRecuperacion" class="availability-grid">
+                    <!-- Se carga dinámicamente -->
+                </div>
+            </div>
+            <button class="btn" id="confirmarRecuperacionBtn">Confirmar Recuperación</button>
+        </div>
+
+        <!-- Pagos Section -->
+        <div id="pagos" class="section">
+            <div class="section-header">
+                <button class="back-btn">←</button>
+                <h2 class="section-title">Registrar Pago</h2>
+            </div>
+            <div class="form-group">
+                <label for="montoPago">Monto</label>
+                <input type="number" id="montoPago" placeholder="20000">
+            </div>
+            <div class="form-group">
+                <label for="metodoPago">Método de pago</label>
+                <select id="metodoPago">
+                    <option value="">Seleccioná...</option>
+                    <option value="transferencia">Transferencia</option>
+                    <option value="mercado_pago">Mercado Pago</option>
+                    <option value="efectivo">Efectivo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="mesPago">Mes a pagar</label>
+                <select id="mesPago">
+                    <option value="">Seleccioná...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Comprobante (opcional)</label>
+                <div class="file-upload" id="fileUploadDiv">
+                    <input type="file" id="comprobante" accept="image/*,.pdf">
+                    <p id="fileText">📎 Click para subir comprobante</p>
+                </div>
+            </div>
+            <button class="btn" id="confirmarPagoBtn">Registrar Pago</button>
+        </div>
+
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <h3 class="modal-title" id="modalTitle">Título</h3>
+                <p id="modalMessage">Mensaje</p>
+                <div class="modal-buttons">
+                    <button class="btn" id="modalCloseBtn">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const SHEETS_API_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL'; // Reemplazar con tu URL de Apps Script
+        
+        // Turnos configuration
+        const TURNOS_CONFIG = {
+            horarios: [
+                { id: 'T1', dia: 'Lunes', horario: '18:00', cupo: 8 },
+                { id: 'T2', dia: 'Martes', horario: '10:00', cupo: 8 },
+                { id: 'T3', dia: 'Miércoles', horario: '19:30', cupo: 8 },
+                { id: 'T4', dia: 'Jueves', horario: '15:00', cupo: 8 },
+                { id: 'T5', dia: 'Viernes', horario: '18:00', cupo: 8 },
+                { id: 'T6', dia: 'Sábado', horario: '10:00', cupo: 10 }
+            ],
+            precio_mensual: 20000,
+            max_turnos_por_alumna: 3
+        };
+        
+        // State
+        let userData = {
+            phone: '',
+            name: '',
+            turnos: [],
+            isLoggedIn: false
+        };
+
+        let selectedTurnos = [];
+        let selectedRecuperacion = null;
+        let selectedNuevoTurno = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+        });
+
+        function initializeApp() {
+            // Populate months
+            const mesPago = document.getElementById('mesPago');
+            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                          'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            for (let i = 0; i < 3; i++) {
+                const monthIndex = (currentMonth + i) % 12;
+                const year = currentMonth + i >= 12 ? currentYear + 1 : currentYear;
+                const option = document.createElement('option');
+                option.value = `${months[monthIndex]} ${year}`;
+                option.text = `${months[monthIndex]} ${year}`;
+                mesPago.appendChild(option);
+            }
+
+            // Check if user data in localStorage
+            const savedData = localStorage.getItem('ceramicaUserData');
+            if (savedData) {
+                userData = JSON.parse(savedData);
+                if (userData.isLoggedIn) {
+                    showMainMenu();
+                }
+            }
+
+            // Format phone input
+            document.getElementById('phoneInput').addEventListener('input', formatPhoneNumber);
+            document.getElementById('phoneInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+        }
+
+        function setupEventListeners() {
+            // Login/Logout
+            document.getElementById('loginBtn').addEventListener('click', login);
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            // Menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    showSection(this.dataset.section);
+                });
+            });
+            
+            // Back buttons
+            document.querySelectorAll('.back-btn').forEach(btn => {
+                btn.addEventListener('click', backToMenu);
+            });
+            
+            // Confirmation buttons
+            document.getElementById('confirmarInscripcionBtn').addEventListener('click', confirmarInscripcion);
+            document.getElementById('confirmarCambioBtn').addEventListener('click', confirmarCambio);
+            document.getElementById('confirmarRecuperacionBtn').addEventListener('click', confirmarRecuperacion);
+            document.getElementById('confirmarPagoBtn').addEventListener('click', confirmarPago);
+            
+            // File upload
+            document.getElementById('fileUploadDiv').addEventListener('click', function() {
+                document.getElementById('comprobante').click();
+            });
+            document.getElementById('comprobante').addEventListener('change', handleFileSelect);
+            
+            // Modal
+            document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+            
+            // Turno actual change
+            document.getElementById('turnoActual').addEventListener('change', function() {
+                if (this.value) {
+                    loadNuevosTurnos(this.value);
+                }
+            });
+        }
+
+        // Format phone number
+        function formatPhoneNumber(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            
+            if (value.length >= 6) {
+                value = value.slice(0, 2) + ' ' + value.slice(2, 6) + '-' + value.slice(6);
+            } else if (value.length >= 2) {
+                value = value.slice(0, 2) + ' ' + value.slice(2);
+            }
+            
+            e.target.value = value;
+        }
+
+        // Login/Logout functions
+        function login() {
+            const phone = document.getElementById('phoneInput').value.replace(/\D/g, '');
+            
+            if (phone.length !== 10) {
+                showModal('Error', 'Por favor ingresá un número válido de 10 dígitos');
+                return;
+            }
+
+            userData.phone = phone;
+            userData.isLoggedIn = true;
+            
+            // Save to localStorage
+            localStorage.setItem('ceramicaUserData', JSON.stringify(userData));
+            
+            // Load user data from sheets (simulated)
+            loadUserData();
+            showMainMenu();
+        }
+
+        function logout() {
+            userData = {
+                phone: '',
+                name: '',
+                turnos: [],
+                isLoggedIn: false
+            };
+            localStorage.removeItem('ceramicaUserData');
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('phoneInput').value = '';
+            hideAllSections();
+        }
+
+        // Navigation
+        function showMainMenu() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('mainMenu').style.display = 'block';
+            hideAllSections();
+        }
+
+        function showSection(sectionId) {
+            hideAllSections();
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Reset selections
+            selectedTurnos = [];
+            selectedRecuperacion = null;
+            selectedNuevoTurno = null;
+            
+            // Load section data
+            switch(sectionId) {
+                case 'misTurnos':
+                    loadMisTurnos();
+                    break;
+                case 'inscripcion':
+                    loadTurnosDisponibles();
+                    break;
+                case 'asistencia':
+                    loadProximasClases();
+                    break;
+                case 'cambiarTurno':
+                    loadCambioTurno();
+                    break;
+                case 'recuperacion':
+                    loadSlotsRecuperacion();
+                    break;
+            }
+        }
+
+        function backToMenu() {
+            hideAllSections();
+            showMainMenu();
+        }
+
+        function hideAllSections() {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.style.display = 'none');
+        }
+
+        // Data Loading Functions
+        function loadUserData() {
+            // Simulated data - replace with actual API call
+            setTimeout(() => {
+                userData.name = 'María García';
+                userData.turnos = [
+                    { id: 'T1', dia: 'Lunes', horario: '18:00', estado: 'activo' },
+                    { id: 'T3', dia: 'Miércoles', horario: '19:30', estado: 'activo' }
+                ];
+            }, 500);
+        }
+
+        function loadMisTurnos() {
+            const container = document.getElementById('turnosList');
+            showLoading(container, true);
+            
+            // Simulated loading
+            setTimeout(() => {
+                if (userData.turnos.length === 0) {
+                    container.innerHTML = '<p>No tenés turnos registrados. ¡Inscribite en uno!</p>';
+                } else {
+                    container.innerHTML = userData.turnos.map(turno => `
+                        <div class="turno-card">
+                            <div class="turno-header">${turno.dia} - ${turno.horario}</div>
+                            <div class="turno-details">Código: ${turno.id} | Estado: ${turno.estado}</div>
+                        </div>
+                    `).join('');
+                }
+            }, 1000);
+        }
+
+        function loadTurnosDisponibles() {
+            const container = document.getElementById('turnosDisponibles');
+            showLoading(container, true);
+            
+            // Use configuration data
+            const turnos = TURNOS_CONFIG.horarios.map(t => ({
+                ...t,
+                disponibles: Math.floor(Math.random() * t.cupo) + 1
+            }));
+
+            setTimeout(() => {
+                container.innerHTML = turnos.map(turno => `
+                    <div class="slot-item" data-turno-id="${turno.id}">
+                        <div class="slot-time">${turno.dia} ${turno.horario}</div>
+                        <div class="slot-availability">${turno.disponibles} lugares disponibles</div>
+                    </div>
+                `).join('');
+                
+                // Add event listeners to slots
+                container.querySelectorAll('.slot-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        toggleTurnoSelection(this.dataset.turnoId, this);
+                    });
+                });
+            }, 1000);
+        }
+
+        function loadProximasClases() {
+            const container = document.getElementById('proximasClases');
+            showLoading(container, true);
+            
+            // Simulated next classes
+            const proximas = userData.turnos.map(turno => {
+                const nextDate = getNextClassDate(turno.dia);
+                return {
+                    turno: turno.id,
+                    dia: formatDate(nextDate),
+                    horario: turno.horario
+                };
+            });
+
+            setTimeout(() => {
+                if (proximas.length === 0) {
+                    container.innerHTML = '<p>No tenés próximas clases programadas.</p>';
+                } else {
+                    container.innerHTML = proximas.map(clase => `
+                        <div class="turno-card">
+                            <div class="turno-header">${clase.dia} - ${clase.horario}</div>
+                            <div style="margin-top: 10px;">
+                                <button class="btn btn-asistencia-si" data-turno="${clase.turno}">✅ Sí, voy</button>
+                                <button class="btn btn-secondary btn-asistencia-no" data-turno="${clase.turno}">❌ No puedo</button>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    // Add event listeners
+                    container.querySelectorAll('.btn-asistencia-si').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            confirmarAsistencia(this.dataset.turno, true);
+                        });
+                    });
+                    
+                    container.querySelectorAll('.btn-asistencia-no').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            confirmarAsistencia(this.dataset.turno, false);
+                        });
+                    });
+                }
+            }, 1000);
+        }
+
+        function loadCambioTurno() {
+            const select = document.getElementById('turnoActual');
+            select.innerHTML = '<option value="">Seleccioná...</option>' + 
+                userData.turnos.map(t => `<option value="${t.id}">${t.dia} ${t.horario}</option>`).join('');
+            
+            // Clear new turnos
+            document.getElementById('nuevosTurnos').innerHTML = '<p>Seleccioná primero el turno que querés cambiar</p>';
+        }
+
+        function loadNuevosTurnos(turnoActualId) {
+            const container = document.getElementById('nuevosTurnos');
+            
+            // Filter out current turno
+            const turnosDisponibles = TURNOS_CONFIG.horarios.filter(t => 
+                t.id !== turnoActualId && !userData.turnos.find(ut => ut.id === t.id)
+            );
+
+            container.innerHTML = turnosDisponibles.map(turno => `
+                <div class="slot-item" data-turno-id="${turno.id}">
+                    <div class="slot-time">${turno.dia} ${turno.horario}</div>
+                    <div class="slot-availability">${Math.floor(Math.random() * turno.cupo) + 1} lugares disponibles</div>
+                </div>
+            `).join('');
+            
+            // Add event listeners
+            container.querySelectorAll('.slot-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    selectNuevoTurno(this.dataset.turnoId, this);
+                });
+            });
+        }
+
+        function loadSlotsRecuperacion() {
+            const container = document.getElementById('slotsRecuperacion');
+            
+            // Generate next 7 days slots
+            const slots = [];
+            const today = new Date();
+            
+            for (let i = 1; i <= 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                // Find matching turnos for this day
+                const dayName = getDayName(date.getDay());
+                const matchingTurnos = TURNOS_CONFIG.horarios.filter(t => t.dia === dayName);
+                
+                matchingTurnos.forEach(turno => {
+                    slots.push({
+                        id: `R${i}_${turno.id}`,
+                        dia: formatDate(date),
+                        horario: turno.horario,
+                        turnoId: turno.id
+                    });
+                });
+            }
+
+            container.innerHTML = slots.slice(0, 6).map(slot => `
+                <div class="slot-item" data-slot-id="${slot.id}">
+                    <div class="slot-time">${slot.dia}</div>
+                    <div class="slot-availability">${slot.horario}</div>
+                </div>
+            `).join('');
+            
+            // Add event listeners
+            container.querySelectorAll('.slot-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    selectRecuperacion(this.dataset.slotId, this);
+                });
+            });
+        }
+
+        // Selection Functions
+        function toggleTurnoSelection(turnoId, element) {
+            if (element.classList.contains('selected')) {
+                element.classList.remove('selected');
+                selectedTurnos = selectedTurnos.filter(t => t !== turnoId);
+            } else if (selectedTurnos.length < TURNOS_CONFIG.max_turnos_por_alumna) {
+                element.classList.add('selected');
+                selectedTurnos.push(turnoId);
+            } else {
+                showModal('Límite alcanzado', `Podés inscribirte en hasta ${TURNOS_CONFIG.max_turnos_por_alumna} turnos`);
+            }
+        }
+
+        function selectNuevoTurno(turnoId, element) {
+            document.querySelectorAll('#nuevosTurnos .slot-item').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedNuevoTurno = turnoId;
+        }
+
+        function selectRecuperacion(slotId, element) {
+            document.querySelectorAll('#slotsRecuperacion .slot-item').forEach(el => {
+                el.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedRecuperacion = slotId;
+        }
+
+        // Confirmation Functions
+        async function confirmarInscripcion() {
+            const nombre = document.getElementById('nombreInscripcion').value.trim();
+            
+            if (!nombre || selectedTurnos.length === 0) {
+                showModal('Datos incompletos', 'Por favor completá tu nombre y elegí al menos un turno');
+                return;
+            }
+
+            // Disable button
+            const btn = document.getElementById('confirmarInscripcionBtn');
+            btn.disabled = true;
+
+            try {
+                await sendToSheets('inscripcion', {
+                    nombre: nombre,
+                    telefono: userData.phone,
+                    turnos: selectedTurnos
+                });
+
+                // Update local data
+                userData.name = nombre;
+                selectedTurnos.forEach(turnoId => {
+                    const turnoInfo = getTurnoInfo(turnoId);
+                    if (turnoInfo && !userData.turnos.find(t => t.id === turnoId)) {
+                        userData.turnos.push(turnoInfo);
+                    }
+                });
+                
+                localStorage.setItem('ceramicaUserData', JSON.stringify(userData));
+
+                showModal('¡Inscripción exitosa!', `Te inscribiste en ${selectedTurnos.length} turno(s). Te llegará un WhatsApp con los detalles.`);
+                
+                setTimeout(() => {
+                    backToMenu();
+                }, 3000);
+            } catch (error) {
+                showModal('Error', 'Hubo un problema al procesar tu inscripción. Intentá de nuevo.');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function confirmarAsistencia(turnoId, asiste) {
+            try {
+                await sendToSheets('asistencia', {
+                    telefono: userData.phone,
+                    turno: turnoId,
+                    asiste: asiste,
+                    fecha: new Date().toISOString()
+                });
+
+                showModal('Confirmado', asiste ? '¡Nos vemos en clase!' : 'Registramos tu ausencia. Podés recuperar la clase.');
+            } catch (error) {
+                showModal('Error', 'No pudimos registrar tu confirmación. Intentá de nuevo.');
+            }
+        }
+
+        async function confirmarCambio() {
+            const turnoActual = document.getElementById('turnoActual').value;
+            
+            if (!turnoActual || !selectedNuevoTurno) {
+                showModal('Error', 'Seleccioná el turno actual y el nuevo turno');
+                return;
+            }
+
+            const btn = document.getElementById('confirmarCambioBtn');
+            btn.disabled = true;
+
+            try {
+                await sendToSheets('cambio_turno', {
+                    telefono: userData.phone,
+                    turno_actual: turnoActual,
+                    turno_nuevo: selectedNuevoTurno
+                });
+
+                // Update local data
+                const index = userData.turnos.findIndex(t => t.id === turnoActual);
+                if (index !== -1) {
+                    const newTurnoInfo = getTurnoInfo(selectedNuevoTurno);
+                    if (newTurnoInfo) {
+                        userData.turnos[index] = newTurnoInfo;
+                        localStorage.setItem('ceramicaUserData', JSON.stringify(userData));
+                    }
+                }
+
+                showModal('Cambio realizado', 'Tu cambio de turno fue procesado correctamente');
+                setTimeout(() => backToMenu(), 2000);
+            } catch (error) {
+                showModal('Error', 'No pudimos procesar el cambio. Intentá de nuevo.');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function confirmarRecuperacion() {
+            const fecha = document.getElementById('fechaRecuperacion').value;
+            
+            if (!fecha || !selectedRecuperacion) {
+                showModal('Error', 'Seleccioná la fecha y el slot para recuperar');
+                return;
+            }
+
+            const btn = document.getElementById('confirmarRecuperacionBtn');
+            btn.disabled = true;
+
+            try {
+                await sendToSheets('recuperacion', {
+                    telefono: userData.phone,
+                    fecha_clase_perdida: fecha,
+                    slot_recuperacion: selectedRecuperacion
+                });
+
+                showModal('Recuperación agendada', 'Tu recuperación fue registrada exitosamente');
+                setTimeout(() => backToMenu(), 2000);
+            } catch (error) {
+                showModal('Error', 'No pudimos registrar la recuperación. Intentá de nuevo.');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        async function confirmarPago() {
+            const monto = document.getElementById('montoPago').value;
+            const metodo = document.getElementById('metodoPago').value;
+            const mes = document.getElementById('mesPago').value;
+
+            if (!monto || !metodo || !mes) {
+                showModal('Datos incompletos', 'Por favor completá todos los campos');
+                return;
+            }
+
+            const btn = document.getElementById('confirmarPagoBtn');
+            btn.disabled = true;
+
+            try {
+                const fileInput = document.getElementById('comprobante');
+                let comprobanteData = null;
+                
+                if (fileInput.files.length > 0) {
+                    comprobanteData = await fileToBase64(fileInput.files[0]);
+                }
+
+                await sendToSheets('pago', {
+                    telefono: userData.phone,
+                    monto: monto,
+                    metodo: metodo,
+                    mes_pagado: mes,
+                    comprobante: comprobanteData
+                });
+
+                showModal('Pago registrado', `Registramos tu pago de ${monto} por ${metodo}`);
+                
+                // Clear form
+                document.getElementById('montoPago').value = '';
+                document.getElementById('metodoPago').value = '';
+                document.getElementById('mesPago').value = '';
+                document.getElementById('comprobante').value = '';
+                document.getElementById('fileText').textContent = '📎 Click para subir comprobante';
+                
+                setTimeout(() => backToMenu(), 3000);
+            } catch (error) {
+                showModal('Error', 'No pudimos registrar el pago. Intentá de nuevo.');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // API Communication
+        async function sendToSheets(action, data) {
+            const payload = {
+                action: action,
+                timestamp: new Date().toISOString(),
+                ...data
+            };
+
+            console.log('Sending to sheets:', payload);
+            
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Uncomment when you have the Apps Script URL
+            /*
+            try {
+                const response = await fetch(SHEETS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                console.log('Request sent successfully');
+            } catch (error) {
+                console.error('Error:', error);
+                throw error;
+            }
+            */
+        }
+
+        // Helper Functions
+        function getTurnoInfo(turnoId) {
+            const turno = TURNOS_CONFIG.horarios.find(t => t.id === turnoId);
+            if (turno) {
+                return {
+                    id: turno.id,
+                    dia: turno.dia,
+                    horario: turno.horario,
+                    estado: 'activo'
+                };
+            }
+            return null;
+        }
+
+        function getDayName(dayIndex) {
+            const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            return days[dayIndex];
+        }
+
+        function getNextClassDate(dayName) {
+            const dayMap = {
+                'Lunes': 1, 'Martes': 2, 'Miércoles': 3,
+                'Jueves': 4, 'Viernes': 5, 'Sábado': 6, 'Domingo': 0
+            };
+            
+            const today = new Date();
+            const todayDay = today.getDay();
+            const targetDay = dayMap[dayName];
+            
+            let daysUntilTarget = targetDay - todayDay;
+            if (daysUntilTarget <= 0) {
+                daysUntilTarget += 7;
+            }
+            
+            const nextDate = new Date(today);
+            nextDate.setDate(today.getDate() + daysUntilTarget);
+            return nextDate;
+        }
+
+        function formatDate(date) {
+            const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 
+                          'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            
+            return `${days[date.getDay()]} ${date.getDate()}/${months[date.getMonth()]}`;
+        }
+
+        function showLoading(container, show) {
+            const loading = container.querySelector('.loading');
+            if (loading) {
+                loading.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('fileText').textContent = `📎 ${file.name}`;
+            }
+        }
+
+        async function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // Modal
+        function showModal(title, message) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+
+    <!-- Google Apps Script Code (para pegar en tu proyecto de Apps Script) -->
+    <!-- 
+    function doPost(e) {
+        try {
+            const sheet = SpreadsheetApp.getActiveSpreadsheet();
+            const data = JSON.parse(e.postData.contents);
+            
+            switch(data.action) {
+                case 'inscripcion':
+                    handleInscripcion(sheet, data);
+                    break;
+                case 'asistencia':
+                    handleAsistencia(sheet, data);
+                    break;
+                case 'cambio_turno':
+                    handleCambioTurno(sheet, data);
+                    break;
+                case 'recuperacion':
+                    handleRecuperacion(sheet, data);
+                    break;
+                case 'pago':
+                    handlePago(sheet, data);
+                    break;
+            }
+            
+            return ContentService
+                .createTextOutput(JSON.stringify({success: true, message: 'Datos guardados correctamente'}))
+                .setMimeType(ContentService.MimeType.JSON);
+                
+        } catch(error) {
+            return ContentService
+                .createTextOutput(JSON.stringify({success: false, error: error.toString()}))
+                .setMimeType(ContentService.MimeType.JSON);
+        }
+    }
+    
+    function handleInscripcion(sheet, data) {
+        const inscripcionesSheet = sheet.getSheetByName('Inscripciones') || sheet.insertSheet('Inscripciones');
+        
+        // Add headers if first row
+        if (inscripcionesSheet.getLastRow() === 0) {
+            inscripcionesSheet.appendRow(['Fecha', 'Nombre', 'Teléfono', 'Turnos', 'Estado']);
+        }
+        
+        inscripcionesSheet.appendRow([
+            new Date(),
+            data.nombre,
+            data.telefono,
+            data.turnos.join(', '),
+            'Activo'
+        ]);
+    }
+    
+    function handleAsistencia(sheet, data) {
+        const asistenciaSheet = sheet.getSheetByName('Asistencia') || sheet.insertSheet('Asistencia');
+        
+        if (asistenciaSheet.getLastRow() === 0) {
+            asistenciaSheet.appendRow(['Fecha', 'Teléfono', 'Turno', 'Asistencia', 'Fecha Clase']);
+        }
+        
+        asistenciaSheet.appendRow([
+            new Date(),
+            data.telefono,
+            data.turno,
+            data.asiste ? 'Presente' : 'Ausente',
+            data.fecha
+        ]);
+    }
+    
+    function handleCambioTurno(sheet, data) {
+        const cambiosSheet = sheet.getSheetByName('Cambios') || sheet.insertSheet('Cambios');
+        
+        if (cambiosSheet.getLastRow() === 0) {
+            cambiosSheet.appendRow(['Fecha', 'Teléfono', 'Turno Anterior', 'Turno Nuevo', 'Estado']);
+        }
+        
+        cambiosSheet.appendRow([
+            new Date(),
+            data.telefono,
+            data.turno_actual,
+            data.turno_nuevo,
+            'Procesado'
+        ]);
+    }
+    
+    function handleRecuperacion(sheet, data) {
+        const recuperacionesSheet = sheet.getSheetByName('Recuperaciones') || sheet.insertSheet('Recuperaciones');
+        
+        if (recuperacionesSheet.getLastRow() === 0) {
+            recuperacionesSheet.appendRow(['Fecha', 'Teléfono', 'Clase Perdida', 'Slot Recuperación', 'Estado']);
+        }
+        
+        recuperacionesSheet.appendRow([
+            new Date(),
+            data.telefono,
+            data.fecha_clase_perdida,
+            data.slot_recuperacion,
+            'Pendiente'
+        ]);
+    }
+    
+    function handlePago(sheet, data) {
+        const pagosSheet = sheet.getSheetByName('Pagos') || sheet.insertSheet('Pagos');
+        
+        if (pagosSheet.getLastRow() === 0) {
+            pagosSheet.appendRow(['Fecha', 'Teléfono', 'Monto', 'Método', 'Mes Pagado', 'Comprobante', 'Estado']);
+        }
+        
+        pagosSheet.appendRow([
+            new Date(),
+            data.telefono,
+            data.monto,
+            data.metodo,
+            data.mes_pagado,
+            data.comprobante ? 'Sí' : 'No',
+            'Confirmado'
+        ]);
+    }
+    
+    // Para deploy:
+    // 1. Guardá este código en script.google.com
+    // 2. Click en "Implementar" > "Nueva implementación"
+    // 3. Tipo: "Aplicación web"
+    // 4. Ejecutar como: "Yo"
+    // 5. Quién tiene acceso: "Cualquiera"
+    // 6. Copiá la URL y pegala en SHEETS_API_URL
+    -->
+</body>
+</html>
